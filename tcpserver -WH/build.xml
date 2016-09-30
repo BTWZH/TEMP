@@ -1,0 +1,49 @@
+<project name="icbc" default="run" basedir=".">
+	<description>
+        simple example build file
+	</description>
+	<!-- set global properties for this build -->
+	<property name="src" location="src" />
+	<property name="test" location="test" />
+	<property name="build" location="WebContent\WEB-INF\classes" />
+	<property name="dist" location="dist" />
+	<property name="classpath" location="WebContent\WEB-INF\lib" />
+	<path id="application-lib">
+		<fileset dir="${classpath}" includes="*.jar" />
+	</path>
+
+
+	<target name="init">
+		<!-- Create the time stamp -->
+		<tstamp />
+		<!-- Create the build directory structure used by compile -->
+	</target>
+
+	<target name="compile" depends="init" description="compile the source ">
+		<!-- Compile the java code from ${src} into ${build} -->
+		<javac srcdir="${src}" destdir="${build}" includeantruntime="false">
+			<classpath>
+				<path location="${build}" />
+				<path location="${classpath}" />
+				<path refid="application-lib" />
+			</classpath>
+		</javac>
+		<copy todir="${build}">
+			<fileset dir="src">
+				<include name="**/*.properties" />
+				<include name="**/*.xml" />
+			</fileset>
+		</copy>
+	</target>
+
+	<target name="run" depends="compile" description="Runs the application">
+		<java classname="cc.julong.main.Server" fork="true" maxmemory="512m">
+			<classpath>
+				<path location="${build}" />
+				<path location="${classpath}" />
+				<path refid="application-lib" />
+			</classpath>
+		</java>
+	</target>
+
+</project>
